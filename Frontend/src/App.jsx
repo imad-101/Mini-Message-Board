@@ -3,6 +3,7 @@ import MessageList from "./MessageList";
 import NewMessageForm from "./NewMessageForm";
 import Navbar from "./Navbar";
 import axios from "axios";
+import Footer from "./Footer";
 
 const App = () => {
   const [isAdd, setIsAdd] = useState(false);
@@ -23,7 +24,7 @@ const App = () => {
   };
 
   return (
-    <div className="dark:bg-gray-900 pb-10">
+    <div className="dark:bg-gray-900 pb-9">
       <Navbar isAdd={isAdd} setIsAdd={setIsAdd} />
       <div className="flex">
         {/* NewMessageForm takes up space on the side when isAdd is true */}
@@ -41,6 +42,7 @@ const App = () => {
           <MessageList messages={messages} />
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
