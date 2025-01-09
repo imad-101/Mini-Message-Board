@@ -13,9 +13,9 @@ const MessageList = ({ messages }) => {
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               {msg.name}
             </h3>
-            <p className="text-gray-700 mb-4">{msg.text}</p>
+            <p className="text-gray-700 mb-4">{msg.message}</p>
             <p className="text-sm text-gray-500">
-              {new Date(msg.timestamp).toLocaleString()}
+              {new Date(msg.time).toLocaleString()}
             </p>
           </div>
         ))}
