@@ -7,7 +7,7 @@ const NewMessageForm = ({ onMessageAdded, isAdd }) => {
 
   const handleSubmit = () => {
     axios
-      .post("http://localhost:5000/api/messages", { name, text })
+      .post("http://localhost:5000/msgapi/messages", { name, text })
       .then((response) => {
         onMessageAdded(response.data);
         setName("");

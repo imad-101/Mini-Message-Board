@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import DarkModeToggle from "./DarkModeToggle";
+import axios from "axios";
 
-function Navbar({ isAdd, setIsAdd }) {
+function Navbar({
+  isAdd,
+  setIsAdd,
+  showLogin,
+  setShowLogin,
+  isLogin,
+  setIsLogin,
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -11,7 +19,23 @@ function Navbar({ isAdd, setIsAdd }) {
   const changeAdd = () => {
     setIsAdd(!isAdd);
   };
+  const handleLogin = () => {
+    setShowLogin(!showLogin);
+  };
 
+  const handleLogout = () => {
+    axios
+      .post("http://localhost:5000/userapi/logout")
+      .then((response) => {
+        alert("Logout Successfull");
+        window.location.reload();
+        setIsLogin(false);
+      })
+      .catch((error) => {
+        console.error("Logout Error:", error);
+        alert("Failed to logout");
+      });
+  };
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -71,21 +95,37 @@ function Navbar({ isAdd, setIsAdd }) {
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
               <button
-                onClick={changeAdd}
+                onClick={isLogin ? changeAdd : () => alert("Login to add")}
                 className="mt-3 block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500 hover:text-black"
               >
                 Add New Message
               </button>
             </li>
             <li>
-              <a
-                target="blank"
-                href="https://github.com/imad-101"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent mt-3"
-              >
-                About
-              </a>
+              <button>
+                <a
+                  onClick={handleLogin}
+                  target="blank"
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent mt-3"
+                >
+                  Login / Register
+                </a>
+              </button>
             </li>
+
+            {isLogin && (
+              <li>
+                <button>
+                  <a
+                    onClick={handleLogout}
+                    target="blank"
+                    className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent mt-3"
+                  >
+                    Logout
+                  </a>
+                </button>
+              </li>
+            )}
             <span className="mb-3">
               <DarkModeToggle />
             </span>
@@ -106,21 +146,20 @@ function Navbar({ isAdd, setIsAdd }) {
         </button>
         <ul className="mt-10 space-y-4 p-5">
           <li>
-            <button
-              onClick={changeAdd}
-              className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white"
-            >
+            <button className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
               Add New Message
             </button>
           </li>
           <li>
-            <a
-              target="blank"
-              href="https://github.com/imad-101"
-              className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white"
-            >
-              About
-            </a>
+            <button>
+              <a
+                onClick={handleLogin}
+                target="blank"
+                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent mt-3"
+              >
+                Login / Register
+              </a>
+            </button>
           </li>
           <li>
             <DarkModeToggle />

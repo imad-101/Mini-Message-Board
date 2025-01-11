@@ -8,3 +8,9 @@ body {
   font-weight: 300;
   font-style: normal;
 }
+@layer base {
+  .dark {
+    background-color: #111727;
+    color: white;
+  }
+}

@@ -4,45 +4,78 @@ import NewMessageForm from "./NewMessageForm";
 import Navbar from "./Navbar";
 import axios from "axios";
 import Footer from "./Footer";
+import Account from "./Account";
 
 const App = () => {
+  const [isLogin, setIsLogin] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
   const [isAdd, setIsAdd] = useState(false);
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    // Fetch messages when the component mounts
+    const storedLoginState = localStorage.getItem("isLogin");
+    const storedLoginTime = localStorage.getItem("loginTime");
+    const currentTime = new Date().getTime();
+
+    if (storedLoginState === "true" && storedLoginTime) {
+      const timeDiff = currentTime - storedLoginTime;
+
+      if (timeDiff > 12 * 60 * 60 * 1000) {
+        localStorage.removeItem("isLogin");
+        localStorage.removeItem("loginTime");
+        setIsLogin(false);
+      } else {
+        setIsLogin(true);
+      }
+    }
+  }, [setIsLogin]);
+
+  useEffect(() => {
     axios
-      .get("http://localhost:5000/api/messages")
+      .get("http://localhost:5000/msgapi/messages")
       .then((response) => setMessages(response.data))
       .catch((error) => console.error(error));
   }, []);
 
-  // Handle new message addition
   const handleNewMessage = (message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
-    setIsAdd(false); // Hide the form after a new message is added
+    setIsAdd(false);
   };
 
   return (
     <div className="dark:bg-gray-900 pb-9">
-      <Navbar isAdd={isAdd} setIsAdd={setIsAdd} />
-      <div className="flex">
-        {/* NewMessageForm takes up space on the side when isAdd is true */}
-        {isAdd && (
-          <div className="w-full md:w-1/3 p-4">
-            <NewMessageForm onMessageAdded={handleNewMessage} isAdd={isAdd} />
+      <>
+        <Navbar
+          isLogin={isLogin}
+          isAdd={isAdd}
+          setIsAdd={setIsAdd}
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
+          setIsLogin={setIsLogin}
+        />
+        <div className="flex">
+          {isAdd && (
+            <div className="w-full md:w-1/3 p-4">
+              <NewMessageForm onMessageAdded={handleNewMessage} isAdd={isAdd} />
+            </div>
+          )}
+          <div
+            className={`w-full ${
+              isAdd ? "md:w-2/3" : "w-full"
+            } transition-all duration-300 ease-in-out`}
+          >
+            <MessageList messages={messages} />
           </div>
-        )}
-        {/* MessageList takes full width or side when form is visible */}
-        <div
-          className={`w-full ${
-            isAdd ? "md:w-2/3" : "w-full"
-          } transition-all duration-300 ease-in-out`}
-        >
-          <MessageList messages={messages} />
         </div>
-      </div>
-      <Footer />
+        <Footer />
+        {showLogin && (
+          <Account
+            setShowLogin={setShowLogin}
+            isLogin={isLogin}
+            setIsLogin={setIsLogin}
+          />
+        )}
+      </>
     </div>
   );
 };

@@ -1,31 +1,79 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const pool = require('./db');
+const { userpool } = require("./db");
+const userRoutes = require("./Routes/userRoutes");
+const messageRoutes = require("./Routes/messageRoutes");
+
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcrypt");
+const session = require("express-session");
 
 const app = express();
+
 app.use(cors());
 app.use(bodyParser.json());
 
-// Routes
-app.get("/api/messages", async (req, res) => {
-  try {
-    const response = await pool.query('SELECT * FROM messages')  
-    res.json(response.rows);
-  } catch (error) {
-    console.error(error.message); 
-  }
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 12 * 60 * 60 * 1000 },
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      userpool.query(
+        "SELECT * FROM users WHERE username = $1",
+        [username],
+        async (err, result) => {
+          if (err) {
+            console.error(err.message);
+            return done(err);
+          }
+          if (result.rows.length === 0) {
+            return done(null, false, { message: "Incorrect username" });
+          }
+          const user = result.rows[0];
+          const match = await bcrypt.compare(password, user.password);
+          if (match) {
+            return done(null, user);
+          } else {
+            return done(null, false, { message: "Incorrect password" });
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error.message);
+      return done(error);
+    }
+  })
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
 });
 
-app.post("/api/messages", async (req, res) => {
-  const { text, name } = req.body;
-  try {
-    const response = await pool.query('INSERT INTO messages (name , message) VALUES ($1, $2) RETURNING *', [name, text]);
-    res.status(201).json(response.rows[0]);
-  } catch (error) {
-    console.error(error.message);
-  }
+passport.deserializeUser((id, done) => {
+  userpool.query("SELECT * FROM users WHERE id = $1", [id], (err, result) => {
+    if (err) {
+      console.error(err.message);
+      return done(err);
+    }
+    const user = result.rows[0];
+    done(null, user);
+  });
 });
+
+app.use("/", messageRoutes);
+app.use("/", userRoutes);
 
 const PORT = 5000;
 app.listen(PORT, () => {
