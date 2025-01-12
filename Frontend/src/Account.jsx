@@ -30,18 +30,14 @@ function Account({ setShowLogin, isLogin, setIsLogin }) {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    console.log("Logging in user with:", { username, password });
 
     axios
       .post("http://localhost:5000/userapi/login", { username, password })
       .then((response) => {
-        console.log("Response:", response.data);
-        // Store login state in localStorage and update state
-        localStorage.setItem("isLogin", "true");
-        localStorage.setItem("loginTime");
         alert("Login Successful");
-        setIsLogin(true); // Set user as logged in
-        setShowLogin(false); // Close login/register modal
+        localStorage.setItem("LocalIsLogin", true);
+        setIsLogin(true);
+        setShowLogin(false);
       })
       .catch((error) => {
         console.error("Login Error:", error);
@@ -50,7 +46,7 @@ function Account({ setShowLogin, isLogin, setIsLogin }) {
   };
 
   return loginPage ? (
-    <div className="fixed inset-0 p-4 flex justify-center items-center w-full h-full z-[1000] bg-blue-200 before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif] dark:bg-gray-900">
+    <div className="fixed inset-0 p-4 flex justify-center items-center w-full h-full z-[1000]  before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
       <div className="w-full max-w-lg bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 relative">
         <button
           onClick={handleLogin}
@@ -121,7 +117,7 @@ function Account({ setShowLogin, isLogin, setIsLogin }) {
       </div>
     </div>
   ) : (
-    <div className="fixed inset-0 p-4 flex justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif] dark:bg-gray-900">
+    <div className="fixed inset-0 p-4 flex justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
       <div className="w-full max-w-lg bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 relative">
         <button
           onClick={handleLogin}

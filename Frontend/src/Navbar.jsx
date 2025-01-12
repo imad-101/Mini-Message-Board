@@ -27,8 +27,7 @@ function Navbar({
     axios
       .post("http://localhost:5000/userapi/logout")
       .then((response) => {
-        alert("Logout Successfull");
-        window.location.reload();
+        localStorage.removeItem("LocalIsLogin");
         setIsLogin(false);
       })
       .catch((error) => {
@@ -146,7 +145,10 @@ function Navbar({
         </button>
         <ul className="mt-10 space-y-4 p-5">
           <li>
-            <button className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
+            <button
+              onClick={isLogin ? changeAdd : () => alert("Login to add")}
+              className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white"
+            >
               Add New Message
             </button>
           </li>
@@ -161,6 +163,19 @@ function Navbar({
               </a>
             </button>
           </li>
+          {isLogin && (
+            <li>
+              <button>
+                <a
+                  onClick={handleLogout}
+                  target="blank"
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent mt-3"
+                >
+                  Logout
+                </a>
+              </button>
+            </li>
+          )}
           <li>
             <DarkModeToggle />
           </li>

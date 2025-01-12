@@ -1,6 +1,6 @@
 const MessageList = ({ messages }) => {
   return (
-    <div className=" p-4 px-16">
+    <div className=" p-4 px-16 ">
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white text-center py-6 pb-10">
         Messages
       </h2>

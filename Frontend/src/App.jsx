@@ -13,20 +13,9 @@ const App = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    const storedLoginState = localStorage.getItem("isLogin");
-    const storedLoginTime = localStorage.getItem("loginTime");
-    const currentTime = new Date().getTime();
-
-    if (storedLoginState === "true" && storedLoginTime) {
-      const timeDiff = currentTime - storedLoginTime;
-
-      if (timeDiff > 12 * 60 * 60 * 1000) {
-        localStorage.removeItem("isLogin");
-        localStorage.removeItem("loginTime");
-        setIsLogin(false);
-      } else {
-        setIsLogin(true);
-      }
+    const localIsLogin = localStorage.getItem("LocalIsLogin");
+    if (localIsLogin) {
+      setIsLogin(true);
     }
   }, [setIsLogin]);
 
