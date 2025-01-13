@@ -25,7 +25,7 @@ function Navbar({
 
   const handleLogout = () => {
     axios
-      .post("http://localhost:5000/userapi/logout")
+      .post("https://vercel.com/imad-101s-projects/mini-message-board-api/userapi/logout")
       .then((response) => {
         localStorage.removeItem("LocalIsLogin");
         setIsLogin(false);
