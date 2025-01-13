@@ -7,7 +7,7 @@ const NewMessageForm = ({ onMessageAdded, isAdd }) => {
 
   const handleSubmit = () => {
     axios
-      .post("http://localhost:5000/msgapi/messages", { name, text })
+      .post("https://vercel.com/imad-101s-projects/mini-message-board-api/msgapi/messages", { name, text })
       .then((response) => {
         onMessageAdded(response.data);
         setName("");
