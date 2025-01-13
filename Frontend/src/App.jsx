@@ -21,7 +21,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/msgapi/messages")
+      .get("https://vercel.com/imad-101s-projects/mini-message-board-api/msgapi/messages")
       .then((response) => setMessages(response.data))
       .catch((error) => console.error(error));
   }, []);
