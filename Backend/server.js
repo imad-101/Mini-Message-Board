@@ -76,8 +76,10 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-app.use("/", messageRoutes);
-app.use("/", userRoutes);
+app.use("/",(req, res) =>{
+  res.send('hello)
+});
+
 
 const PORT = 5000;
 app.listen(PORT, () => {
