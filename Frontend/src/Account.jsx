@@ -17,7 +17,7 @@ function Account({ setShowLogin, isLogin, setIsLogin }) {
   const handleRegister = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/userapi/register", { username, password })
+      .post("https://vercel.com/imad-101s-projects/mini-message-board-api/register", { username, password })
       .then((response) => {
         alert("Registered Successfully");
         handleSwitch();
@@ -32,7 +32,7 @@ function Account({ setShowLogin, isLogin, setIsLogin }) {
     e.preventDefault();
 
     axios
-      .post("http://localhost:5000/userapi/login", { username, password })
+      .post("https://vercel.com/imad-101s-projects/mini-message-board-api/login", { username, password })
       .then((response) => {
         alert("Login Successful");
         localStorage.setItem("LocalIsLogin", true);
